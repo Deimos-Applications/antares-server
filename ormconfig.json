@@ -1,0 +1,10 @@
+{
+  "type": "mysql",
+  "host": "localhost",
+  "username": "antares",
+  "password": "123",
+  "database": "antares_dev",
+  "port": 3306,
+  "entities": ["dist/**/*.entity{.ts,.js}"],
+  "synchronize": true
+}   
