@@ -34,6 +34,7 @@
     "class-validator": "^0.13.1",
     "lodash": "^4.17.21",
     "mysql2": "^2.2.5",
+    "nestjs-i18n": "^8.1.1",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
