@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
@@ -29,22 +29,17 @@ export class UserService {
     return this.repo.find();
   }
 
-  async findByLogin(email: string, password: string) {
-    Logger.debug(email + ' => ' + password);
+  async findByLogin(email: string, password: string): Promise<User | null> {
     const user = await this.repo.findOne({ where: { email } });
 
     if (!user) {
-      Logger.error(`user: ${email} doesnt exists`);
-      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+      return null;
     }
 
     const areEqual = await compare(password, user.password);
 
     if (!areEqual) {
-      Logger.error(
-        `user: ${email} with password: ${password} doesnt match => ${areEqual}`,
-      );
-      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+      return null;
     }
 
     return user;

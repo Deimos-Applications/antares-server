@@ -4,19 +4,24 @@ import { User } from '../entities/user.entity';
 import { UserService } from '../user/user.service';
 import { RegisterDto } from './auth.dto';
 import { omit } from 'lodash';
+import { I18nRequestScopeService } from 'nestjs-i18n';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
+    private readonly i18n: I18nRequestScopeService,
   ) {}
 
   async validateUser(email: string) {
     const user = await this.userService.findByEmail(email);
 
     if (!user) {
-      throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
+      throw new HttpException(
+        await this.i18n.t('auth.USER_NOT_FOUND'),
+        HttpStatus.UNAUTHORIZED,
+      );
     }
 
     return omit(user, ['password']);
@@ -34,7 +39,10 @@ export class AuthService {
     const user = await this.userService.findByEmail(payload.email);
 
     if (user) {
-      throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        await this.i18n.t('auth.USER_ALREADY_EXISTS'),
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     const newUser = await this.userService.create(payload);
